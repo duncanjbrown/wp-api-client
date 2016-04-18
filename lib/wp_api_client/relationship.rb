@@ -69,6 +69,9 @@ module WpApiClient
     attr_reader :relation
 
     def initialize(resource, relation)
+      if WpApiClient.configuration.wp_version_greater_than_or_equal_to("4.5")
+        relation = convert_uri_to_curie(relation)
+      end
       @resource = resource
       @relation = relation
     end
@@ -125,6 +128,16 @@ Available mappings are :post, :term, and :meta.}
         end
       end
       WpApiClient.get_client.get(location) if location
+    end
+
+    def convert_uri_to_curie(uri)
+      uri_curie_mappings = {
+        "https://api.w.org/term" => "wp:term",
+        "https://api.w.org/items" => "wp:items",
+        "https://api.w.org/meta" => "wp:meta",
+        "https://api.w.org/featuredmedia" => "wp:featuredmedia"
+      }
+      uri_curie_mappings.dig(uri) || uri
     end
   end
 end

@@ -20,6 +20,7 @@ require "wp_api_client/collection"
 require "wp_api_client/relationship"
 
 module WpApiClient
+
   def self.get_client
     @client ||= Client.new(Connection.new(configuration))
   end
