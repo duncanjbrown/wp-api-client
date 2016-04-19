@@ -21,7 +21,7 @@
 #
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }
-wp_version = ENV["WP_VERSION"] || "4.4"
+wp_version = ENV["WP_VERSION"] || "4.5"
 WPAPICLIENT_VCR_PATH = "spec/cassettes/#{wp_version}"
 
 require 'vcr'

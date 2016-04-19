@@ -29,7 +29,7 @@ module WpApiClient
     def initialize
       @endpoint = 'http://localhost:8080/wp-json/wp/v2'
       @embed = true
-      @wp_version = "4.4.2"
+      @wp_version = "4.5"
     end
 
     def wp_version_greater_than_or_equal_to(version)

@@ -8,7 +8,9 @@ It can make concurrent requests.
 
 It does not support comments, users or POST requests.
 
-It requires **Ruby 2.3** and is tested against **WP-API 2.0-beta12**.
+It requires **Ruby 2.3** and is tested against **WP-API 2.0-beta12** on WordPress 4.4.2 and WordPress 4.5.
+
+Support for future WP-API versions depends on the resolution of [this bug](https://github.com/WP-API/wp-api-meta-endpoints/issues/12) introduced in WP-API 2.0-beta13.
 
 ## Installation
 
@@ -20,6 +22,16 @@ And
 
 ```ruby
 require 'wp_api_client'
+```
+
+## For WordPress versions < 4.5
+
+WP 4.5 introduced a new way of handling relationships in the API. If you're running an older version you should let the client know when you set it up.
+
+```ruby
+WpApiClient.configure do |api_client|
+  api_client.wp_version = '4.4.2'
+end
 ```
 
 ## Usage examples
