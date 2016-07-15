@@ -9,3 +9,5 @@
 /tmp/
 /config/oauth.json
 *.gem
+
+.idea
