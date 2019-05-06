@@ -48,7 +48,7 @@ module WpApiClient
     end
 
     def post(url, params = {})
-      @conn.get url, parse_params(params)
+      @conn.post url, params
     end
 
     # requests come in as url/params pairs
