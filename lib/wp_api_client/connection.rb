@@ -47,6 +47,10 @@ module WpApiClient
       @conn.get url, parse_params(params)
     end
 
+    def post(url, params = {})
+      @conn.get url, parse_params(params)
+    end
+
     # requests come in as url/params pairs
     def get_concurrently(requests)
       responses = []
