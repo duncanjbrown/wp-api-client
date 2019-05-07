@@ -16,7 +16,7 @@ module WpApiClient
       @conn = Faraday.new(url: configuration.endpoint) do |faraday|
 
         if configuration.oauth2_token
-          faraday.use FaradayMiddleware::OAuth2, configuration.oauth2_token
+          faraday.use FaradayMiddleware::OAuth2, configuration.oauth2_token, token_type: :bearer
         end
 
         if configuration.oauth_credentials
