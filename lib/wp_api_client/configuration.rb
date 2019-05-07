@@ -20,6 +20,7 @@ module WpApiClient
     attr_accessor :endpoint
     attr_accessor :embed
     attr_accessor :oauth_credentials
+    attr_accessor :oauth2_token
     attr_accessor :debug
     attr_accessor :cache
     attr_accessor :basic_auth

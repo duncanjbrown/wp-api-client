@@ -15,6 +15,10 @@ module WpApiClient
       @queue = []
       @conn = Faraday.new(url: configuration.endpoint) do |faraday|
 
+        if configuration.oauth2_token
+          faraday.use FaradayMiddleware::OAuth2, configuration.oauth2_token
+        end
+
         if configuration.oauth_credentials
           faraday.use FaradayMiddleware::OAuth, configuration.oauth_credentials
         end
