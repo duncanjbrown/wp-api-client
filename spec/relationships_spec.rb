@@ -38,24 +38,27 @@ RSpec.describe WpApiClient::Relationship do
     end
   end
 
-  describe "relationships with metadata", vcr: {cassette_name: 'single_post_auth', record: :new_episodes} do
-    before :each do
-      # we need oAuth for this
-      WpApiClient.reset!
-      oauth_credentials = get_test_oauth_credentials
-      WpApiClient.configure do |api_client|
-        api_client.oauth_credentials = oauth_credentials
-      end
-      @api = WpApiClient.get_client
-      post = @api.get("posts/1")
-      @relationship = WpApiClient::Relationship.new(post.resource, "https://api.w.org/meta")
-    end
+  describe "relationships with metadata" do
+    [:oauth, :oauth2].each do |auth_type|
+      subject(:api) {
+        WpApiClient.reset!
+        oauth_credentials = get_test_oauth_credentials
+        WpApiClient.configure do |api_client|
+          if auth_type == :oauth
+            api_client.oauth_credentials = oauth_credentials
+          elsif auth_type == :oauth2
+            api_client.oauth2_token = oauth_credentials
+          end
+        end
+        WpApiClient.get_client
+      }
 
-    it "returns an hash of meta" do
-      relations = @relationship.get_relations
-      expect(relations).to be_a Hash
-      expect(relations["example_metadata_field"]).to be_a String
+      it "returns an hash of meta", vcr: {cassette_name: 'single_post_auth', record: :new_episodes} do
+        post = api.get("posts/1")
+        relations = WpApiClient::Relationship.new(post.resource, "https://api.w.org/meta").get_relations
+        expect(relations).to be_a Hash
+        expect(relations["example_metadata_field"]).to be_a String
+      end
     end
   end
-
 end

@@ -58,6 +58,16 @@ RSpec.describe WpApiClient::Configuration do
       WpApiClient.get_client.get('posts/1')
     end
 
+    it "can set up OAuth2 token", vcr: {cassette_name: :oauth_test} do
+      oauth_credentials = get_test_oauth_credentials
+
+      WpApiClient.configure do |api_client|
+        api_client.oauth2_token = oauth_credentials
+      end
+
+      WpApiClient.get_client.get('posts/1')
+    end
+
     it "can set up link relationships", vcr: {cassette_name: :single_post} do
       WpApiClient.configure do |api_client|
         api_client.define_mapping("http://my.own/mapping", :post)

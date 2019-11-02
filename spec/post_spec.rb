@@ -37,45 +37,51 @@ RSpec.describe WpApiClient::Entities::Post do
 
   describe "meta function" do
 
-    before :all do
-      WpApiClient.reset!
-      oauth_credentials = get_test_oauth_credentials
+    [:oauth, :oauth2].each do |auth_type|
+      before :all do
+        WpApiClient.reset!
+        oauth_credentials = get_test_oauth_credentials
 
-      WpApiClient.configure do |api_client|
-        api_client.oauth_credentials = oauth_credentials
+        WpApiClient.configure do |api_client|
+          if auth_type == :oauth
+            api_client.oauth_credentials = oauth_credentials
+          elsif auth_type == :oauth2
+            api_client.oauth2_token = oauth_credentials
+          end
+        end
+        @api = WpApiClient.get_client
       end
-      @api = WpApiClient.get_client
-    end
 
-    after :all do
-      WpApiClient.reset!
-    end
-
-    it "returns an individual meta value" do
-      VCR.use_cassette('single_post_auth', record: :new_episodes) do
-        @post = WpApiClient.get_client.get("posts/1")
-        expect(@post.meta(:example_metadata_field)).to eq "example_meta_value"
+      after :all do
+        WpApiClient.reset!
       end
-    end
 
-    it "caches" do
-      VCR.use_cassette('single_post_auth', record: :new_episodes) do
-        @post = WpApiClient.get_client.get("posts/1")
-        meta_value = @post.meta(:example_metadata_field)
+      it "returns an individual meta value" do
+        VCR.use_cassette('single_post_auth', record: :new_episodes) do
+          @post = WpApiClient.get_client.get("posts/1")
+          expect(@post.meta(:example_metadata_field)).to eq "example_meta_value"
+        end
       end
-      VCR.turned_off do
-        ::WebMock.disable_net_connect!
-        expect {
-          @post.meta(:example_associated_post_id)
-        }.to_not raise_error
-      end
-    end
 
-    it "returns the right items from cache" do
-      VCR.use_cassette('single_post_auth', record: :new_episodes) do
-        @post = WpApiClient.get_client.get("posts/1")
-        expect(@post.meta(:example_metadata_field)).to eq "example_meta_value"
-        expect(@post.meta(:example_associated_post_id)).to eq "100"
+      it "caches" do
+        VCR.use_cassette('single_post_auth', record: :new_episodes) do
+          @post = WpApiClient.get_client.get("posts/1")
+          meta_value = @post.meta(:example_metadata_field)
+        end
+        VCR.turned_off do
+          ::WebMock.disable_net_connect!
+          expect {
+            @post.meta(:example_associated_post_id)
+          }.to_not raise_error
+        end
+      end
+
+      it "returns the right items from cache" do
+        VCR.use_cassette('single_post_auth', record: :new_episodes) do
+          @post = WpApiClient.get_client.get("posts/1")
+          expect(@post.meta(:example_metadata_field)).to eq "example_meta_value"
+          expect(@post.meta(:example_associated_post_id)).to eq "100"
+        end
       end
     end
   end
