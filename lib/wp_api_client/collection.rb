@@ -2,7 +2,7 @@ module WpApiClient
   class Collection
     include Enumerable
 
-    attr_accessor :resources, :total_available
+    attr_accessor :resources, :total_available, :total_pages
 
     def initialize(resources, headers = nil)
       resources = [resources] unless resources.is_a? Array
@@ -10,6 +10,7 @@ module WpApiClient
       if headers
         @links = parse_link_header(headers['Link'])
         @total_available = headers['X-WP-TOTAL'].to_i
+        @total_pages = headers['X-WP-TotalPages'].to_i
       end
     end
 

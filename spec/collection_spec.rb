@@ -38,6 +38,16 @@ RSpec.describe WpApiClient::Collection do
       expect(@collection.count).to eq 9
     end
 
+    it "should respond to total_pages and total_available" do
+      expect(@collection).to respond_to(:total_pages)
+      expect(@collection).to respond_to(:total_available)
+    end
+
+    it "should have 10 pages and 100 articles" do
+      expect(@collection.total_pages).to eq(10)
+      expect(@collection.total_available).to eq(100)
+    end
+
     it "throws an error when it tries to parse an error response" do
       expect {
         WpApiClient::Collection.new([{"code"=>"rest_forbidden", "message"=>"You don't have permission to do this.", "data"=>{"status"=>403}}])

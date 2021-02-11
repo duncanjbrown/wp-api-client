@@ -1,4 +1,13 @@
 language: ruby
 rvm:
   - 2.3.0
+  - 2.5.3
 before_install: gem install bundler -v 1.11.2
+script:
+  - WP_VERSION=4.4 bundle exec rspec
+  - WP_VERSION=4.5 bundle exec rspec
+  - WP_VERSION=4.5.3 bundle exec rspec
+  - WP_VERSION=4.5.3_b13 bundle exec rspec
+  - WP_VERSION=4.7 bundle exec rspec
+  - WP_VERSION=4.7.2 bundle exec rspec
+cache: bundler
