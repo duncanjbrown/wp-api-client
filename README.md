@@ -184,13 +184,14 @@ taxonomy_name = term.taxonomy.name
 posts = term.posts
 ```
 
-#### OAuth
+#### OAuth & OAuth2
 
 Provide a symbol-keyed hash of `token`, `token_secret`, `consumer_key` and `consumer_secret` on configuration.
 
 ```ruby
 WpApiClient.configure do |api_client|
-  api_client.oauth_credentials = oauth_credentials_hash
+  api_client.oauth_credentials = oauth_credentials_hash #OAuth
+  api_client.oauth2_token = oauth_token #OAuth2
 end
 
 client = WpApiClient.get_client

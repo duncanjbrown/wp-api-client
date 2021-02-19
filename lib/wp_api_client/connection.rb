@@ -15,7 +15,9 @@ module WpApiClient
       @queue = []
       @conn = Faraday.new(url: configuration.endpoint) do |faraday|
 
-        if configuration.oauth_credentials
+        if configuration.oauth2_token
+          faraday.request :oauth2, configuration.oauth2_token
+        elsif configuration.oauth_credentials
           faraday.use FaradayMiddleware::OAuth, configuration.oauth_credentials
         end
 
@@ -45,6 +47,10 @@ module WpApiClient
     # translate requests into wp-api urls
     def get(url, params = {})
       @conn.get url, parse_params(params)
+    end
+
+    def post(url, params = {})
+      @conn.post url, params
     end
 
     # requests come in as url/params pairs
